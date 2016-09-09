@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using EFGetStarted.AspNetCore.NewDb.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EFGetStarted.AspNetCore.NewDb
 {
@@ -20,6 +22,12 @@ namespace EFGetStarted.AspNetCore.NewDb
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            var connection = @"Server=(localdb)\mssqllocaldb;Database=EFGetStarted.AspNetCore.NewDb;Trusted_Connection=True;"; 
+            services.AddDbContext <BloggingContext>(options => options.UseSqlServer(connection));
         }
 
         public IConfigurationRoot Configuration { get; }
